@@ -7,9 +7,11 @@
  * Author URI:        https://handyplugins.co/
  * Text Domain:       simply-disable-comments
  * Domain Path:       /languages
- * Version:           0.2
+ * Version:           0.3
  * Requires at least: 5.0
  * Requires PHP:      7.2
+ * License:           GPLv2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  *
  * @package         SimplyDisableComments
  */
@@ -20,15 +22,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'SIMPLY_DISABLE_COMMENTS_VERSION', '0.2' );
+define( 'SIMPLY_DISABLE_COMMENTS_VERSION', '0.3' );
 define( 'SIMPLY_DISABLE_COMMENTS_PLUGIN_FILE', __FILE__ );
 define( 'SIMPLY_DISABLE_COMMENTS_URL', plugin_dir_url( __FILE__ ) );
 define( 'SIMPLY_DISABLE_COMMENTS_PATH', plugin_dir_path( __FILE__ ) );
 
-$network_activated = is_network_wide( __FILE__ );
+$simply_disable_comments_network_activated = is_network_wide( __FILE__ );
 
 if ( ! defined( 'SIMPLY_DISABLE_COMMENTS_IS_NETWORK' ) ) {
-	define( 'SIMPLY_DISABLE_COMMENTS_IS_NETWORK', $network_activated );
+	define( 'SIMPLY_DISABLE_COMMENTS_IS_NETWORK', $simply_disable_comments_network_activated );
 }
 
 /**
@@ -62,9 +64,8 @@ function setup() {
  * @return void
  */
 function i18n() {
-	$locale = apply_filters( 'plugin_locale', get_locale(), 'simply-disable-comments' );
+	$locale = apply_filters( 'simply_disable_comments_locale', get_locale(), 'simply-disable-comments' );
 	load_textdomain( 'simply-disable-comments', WP_LANG_DIR . '/simply-disable-comments/simply-disable-comments-' . $locale . '.mo' );
-	load_plugin_textdomain( 'simply-disable-comments', false, plugin_basename( plugin_dir_path( __FILE__ ) ) . '/languages/' );
 }
 
 /**
@@ -95,6 +96,8 @@ function remove_comments_blocks() {
 		'core/latest-comments',
 		'core/post-comments-form',
 		'core/post-comments',
+		'core/post-comments-count',
+		'core/post-comments-link',
 	];
 
 	foreach ( $comment_blocks as $block ) {
